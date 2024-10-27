@@ -1,0 +1,294 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">pickle</span>
+<span class="s0">from </span><span class="s1">os </span><span class="s0">import </span><span class="s1">system</span>
+<span class="s0">from </span><span class="s1">Portfolio </span><span class="s0">import </span><span class="s1">Portfolio</span>
+<span class="s0">from </span><span class="s1">Holding </span><span class="s0">import </span><span class="s1">Holding</span>
+<span class="s0">from </span><span class="s1">prettytable </span><span class="s0">import </span><span class="s1">PrettyTable</span>
+
+
+<span class="s0">def </span><span class="s1">saveData():</span>
+    <span class="s0">with </span><span class="s1">open(</span><span class="s2">'portfolioData.txt'</span><span class="s0">, </span><span class="s2">'wb'</span><span class="s1">) </span><span class="s0">as </span><span class="s1">file:</span>
+        <span class="s1">pickle.dump(portfolios</span><span class="s0">, </span><span class="s1">file)</span>
+
+
+<span class="s0">def </span><span class="s1">clear():</span>
+    <span class="s1">system(</span><span class="s2">'cls'</span><span class="s1">)</span>
+
+
+<span class="s0">def </span><span class="s1">startup():</span>
+    <span class="s0">while True</span><span class="s1">:</span>
+        <span class="s1">clear()</span>
+        <span class="s1">print(</span><span class="s2">&quot;Welcome to the Portfolio Data Collector.&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(a) Start New Portfolio&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(b) Delete Existing Portfolio&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(c) View Existing Portfolios&quot;</span><span class="s1">)</span>
+        <span class="s1">answer = input(</span><span class="s2">&quot;Enter choice: &quot;</span><span class="s1">)</span>
+        <span class="s0">if </span><span class="s1">answer.lower() == </span><span class="s2">&quot;a&quot;</span><span class="s1">:</span>
+            <span class="s1">createPortfolio()</span>
+        <span class="s0">elif </span><span class="s1">answer.lower() == </span><span class="s2">&quot;b&quot;</span><span class="s1">:</span>
+            <span class="s1">deletePortfolio()</span>
+        <span class="s0">elif </span><span class="s1">answer.lower() == </span><span class="s2">&quot;c&quot;</span><span class="s1">:</span>
+            <span class="s1">choosePortfolio()</span>
+
+
+<span class="s0">def </span><span class="s1">showPortfolioList():</span>
+    <span class="s1">print(</span><span class="s2">&quot;Portfolio List:</span><span class="s0">\n</span><span class="s2">&quot;</span><span class="s1">)</span>
+    <span class="s0">for </span><span class="s1">index</span><span class="s0">, </span><span class="s1">portfolio </span><span class="s0">in </span><span class="s1">enumerate(portfolios):</span>
+        <span class="s1">print(</span><span class="s2">f&quot;(</span><span class="s0">{</span><span class="s1">index</span><span class="s0">}</span><span class="s2">) </span><span class="s0">{</span><span class="s1">portfolio</span><span class="s0">}</span><span class="s2">&quot;</span><span class="s1">)</span>
+
+
+<span class="s0">def </span><span class="s1">showHoldingList(portfolio):</span>
+    <span class="s1">print(</span><span class="s2">&quot;Portfolio:&quot;</span><span class="s1">)</span>
+    <span class="s0">for </span><span class="s1">index</span><span class="s0">, </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">enumerate(portfolio.getHoldings()):</span>
+        <span class="s1">print(</span><span class="s2">f&quot;(</span><span class="s0">{</span><span class="s1">index</span><span class="s0">}</span><span class="s2">) </span><span class="s0">{</span><span class="s1">holding.getTicker()</span><span class="s0">}</span><span class="s2">&quot;</span><span class="s1">)</span>
+
+
+<span class="s0">def </span><span class="s1">createPortfolio():</span>
+    <span class="s1">clear()</span>
+    <span class="s1">answer = input(</span><span class="s2">&quot;Enter a name for the new portfolio: &quot;</span><span class="s1">)</span>
+    <span class="s0">for </span><span class="s1">portfolio </span><span class="s0">in </span><span class="s1">portfolios:</span>
+        <span class="s0">if </span><span class="s1">portfolio.getName() == answer:</span>
+            <span class="s1">createPortfolio()</span>
+    <span class="s1">portfolios.append(Portfolio(answer))</span>
+    <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">deletePortfolio():</span>
+    <span class="s0">while True</span><span class="s1">:</span>
+        <span class="s1">clear()</span>
+        <span class="s1">showPortfolioList()</span>
+        <span class="s1">answer = int(input(</span><span class="s2">&quot;</span><span class="s0">\n</span><span class="s2">Which portfolio would you like to delete?: &quot;</span><span class="s1">))</span>
+        <span class="s0">if </span><span class="s1">answer &lt; len(portfolios):</span>
+            <span class="s1">portfolios.remove(portfolios[answer])</span>
+            <span class="s1">saveData()</span>
+            <span class="s0">break</span>
+
+
+<span class="s0">def </span><span class="s1">choosePortfolio():</span>
+    <span class="s0">while True</span><span class="s1">:</span>
+        <span class="s1">clear()</span>
+        <span class="s1">showPortfolioList()</span>
+        <span class="s1">answer = input(</span><span class="s2">&quot;</span><span class="s0">\n </span><span class="s2">Which portfolio would you like to view? (Type 'Back' to return to Home): &quot;</span><span class="s1">)</span>
+        <span class="s0">if </span><span class="s1">answer.lower() == </span><span class="s2">&quot;back&quot;</span><span class="s1">:</span>
+            <span class="s0">break</span>
+        <span class="s0">if </span><span class="s1">int(answer) &lt; len(portfolios):</span>
+            <span class="s1">portfolioHome(portfolios[int(answer)])</span>
+            <span class="s0">break</span>
+
+
+<span class="s0">def </span><span class="s1">portfolioHome(portfolio):</span>
+    <span class="s0">while True</span><span class="s1">:</span>
+        <span class="s1">clear()</span>
+        <span class="s1">print(</span><span class="s2">f&quot;Welcome to the overview for </span><span class="s0">{</span><span class="s1">portfolio.getName()</span><span class="s0">}</span><span class="s2">!&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;What would you like to do?&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(a) Add a New Position&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(b) Delete an Existing Position&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(c) Document a Dividend Payment&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(d) Document an Interest Payment&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(e) Document a Non-Documented Dividend&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(f) Update Portfolio Yields, Equity, and P/L&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(g) Update Brokerage Cash&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(h) Update Interest Rate&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(i) Change a Daily Investment&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(j) View Portfolio Data&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(k) View Portfolio Overview Data&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;(l) Return to Home&quot;</span><span class="s1">)</span>
+        <span class="s1">answer = input(</span><span class="s2">&quot;Enter choice: &quot;</span><span class="s1">)</span>
+        <span class="s1">answer = answer.lower()</span>
+        <span class="s0">if </span><span class="s1">answer == </span><span class="s2">&quot;a&quot;</span><span class="s1">:</span>
+            <span class="s1">addHolding(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;b&quot;</span><span class="s1">:</span>
+            <span class="s1">deleteHolding(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;c&quot;</span><span class="s1">:</span>
+            <span class="s1">addDivPayment(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;d&quot;</span><span class="s1">:</span>
+            <span class="s1">addInterestPayment(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;e&quot;</span><span class="s1">:</span>
+            <span class="s1">addNonDocDiv(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;f&quot;</span><span class="s1">:</span>
+            <span class="s1">updateData(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;g&quot;</span><span class="s1">:</span>
+            <span class="s1">updateBrokerageCash(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;h&quot;</span><span class="s1">:</span>
+            <span class="s1">updateInterestRate(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;i&quot;</span><span class="s1">:</span>
+            <span class="s1">changeDaily(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;j&quot;</span><span class="s1">:</span>
+            <span class="s1">viewPortfolio(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;k&quot;</span><span class="s1">:</span>
+            <span class="s1">viewPortfolioOverview(portfolio)</span>
+        <span class="s0">elif </span><span class="s1">answer == </span><span class="s2">&quot;l&quot;</span><span class="s1">:</span>
+            <span class="s0">break</span>
+
+
+<span class="s0">def </span><span class="s1">addHolding(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">ticker = input(</span><span class="s2">&quot;Enter Ticker Symbol: &quot;</span><span class="s1">)</span>
+    <span class="s1">sector = input(</span><span class="s2">&quot;Enter Sector: &quot;</span><span class="s1">)</span>
+    <span class="s1">type = input(</span><span class="s2">&quot;Enter Investment Type (Stock/ETF): &quot;</span><span class="s1">)</span>
+    <span class="s1">div_yield = float(input(</span><span class="s2">&quot;Enter Dividend Yield (%): &quot;</span><span class="s1">)) / </span><span class="s3">100</span>
+    <span class="s0">if </span><span class="s1">type.lower() == </span><span class="s2">&quot;stock&quot;</span><span class="s1">:</span>
+        <span class="s1">exp_ratio = </span><span class="s3">0.0</span>
+    <span class="s0">else</span><span class="s1">:</span>
+        <span class="s1">exp_ratio = float(input(</span><span class="s2">&quot;Enter Expense Ratio (%): &quot;</span><span class="s1">)) / </span><span class="s3">100</span>
+    <span class="s1">equity = float(input(</span><span class="s2">&quot;Enter Current Equity: &quot;</span><span class="s1">))</span>
+    <span class="s1">newHolding = Holding(ticker</span><span class="s0">, </span><span class="s1">sector</span><span class="s0">, </span><span class="s1">type</span><span class="s0">, </span><span class="s1">div_yield</span><span class="s0">, </span><span class="s1">exp_ratio</span><span class="s0">, </span><span class="s1">equity)</span>
+    <span class="s1">newHolding.calculateData()</span>
+    <span class="s1">portfolio.addHolding(newHolding)</span>
+    <span class="s1">portfolio.updateData()</span>
+    <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">deleteHolding(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">showHoldingList(portfolio)</span>
+    <span class="s1">answer = int(input(</span><span class="s2">&quot;Which holding would you like to delete?: &quot;</span><span class="s1">))</span>
+    <span class="s1">clear()</span>
+    <span class="s0">if </span><span class="s1">answer &lt; len(portfolio.getHoldings()):</span>
+        <span class="s1">holding = portfolio.getHolding(answer)</span>
+        <span class="s1">portfolio.addNonDocDivPayment(holding.getDivReinvested())</span>
+        <span class="s1">portfolio.getHoldings().remove(holding)</span>
+        <span class="s1">portfolio.updateData()</span>
+        <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">addDivPayment(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">showHoldingList(portfolio)</span>
+    <span class="s1">answer = int(input(</span><span class="s2">&quot;Which holding would you like to document a dividend payment for?: &quot;</span><span class="s1">))</span>
+    <span class="s1">clear()</span>
+    <span class="s0">if </span><span class="s1">answer &lt; len(portfolio.getHoldings()):</span>
+        <span class="s1">holding = portfolio.getHolding(answer)</span>
+        <span class="s1">div_payment = float(input(</span><span class="s2">f&quot;What is the payment from </span><span class="s0">{</span><span class="s1">holding.getTicker()</span><span class="s0">}</span><span class="s2">? ($): &quot;</span><span class="s1">))</span>
+        <span class="s1">holding.addDividend(div_payment)</span>
+        <span class="s1">holding.calculateData()</span>
+        <span class="s1">portfolio.updateData()</span>
+        <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">addInterestPayment(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">answer = float(input(</span><span class="s2">&quot;What is the interest payment? ($): &quot;</span><span class="s1">))</span>
+    <span class="s1">portfolio.addInterestPayment(answer)</span>
+    <span class="s1">portfolio.updateData()</span>
+    <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">addNonDocDiv(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">answer = float(input(</span><span class="s2">&quot;What is the new non-documented dividend payment? ($): &quot;</span><span class="s1">))</span>
+    <span class="s1">portfolio.addNonDocDivPayment(answer)</span>
+    <span class="s1">portfolio.updateData()</span>
+    <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">updateData(portfolio):</span>
+    <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">portfolio.getHoldings():</span>
+        <span class="s1">clear()</span>
+        <span class="s1">print(</span><span class="s2">f&quot;Current Yield: </span><span class="s0">{</span><span class="s1">holding.getDivYield() * </span><span class="s3">100</span><span class="s0">:</span><span class="s2">.2f</span><span class="s0">}</span><span class="s2">%&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;Type 'S' for same value.&quot;</span><span class="s1">)</span>
+        <span class="s1">new_div_yield = input(</span><span class="s2">f&quot;What is the current dividend yield for </span><span class="s0">{</span><span class="s1">holding.getTicker()</span><span class="s0">}</span><span class="s2">? (%): &quot;</span><span class="s1">)</span>
+        <span class="s0">if </span><span class="s1">new_div_yield != </span><span class="s2">'S' </span><span class="s0">and </span><span class="s1">new_div_yield != </span><span class="s2">'s'</span><span class="s1">:</span>
+            <span class="s1">holding.setDivYield(float(new_div_yield) / </span><span class="s3">100</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">f&quot;Current Equity: $</span><span class="s0">{</span><span class="s1">holding.getEquity()</span><span class="s0">:</span><span class="s2">.2f</span><span class="s0">}</span><span class="s2">&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;Type 'S' for same value.&quot;</span><span class="s1">)</span>
+        <span class="s1">new_equity = input(</span><span class="s2">f&quot;What is your current equity for </span><span class="s0">{</span><span class="s1">holding.getTicker()</span><span class="s0">}</span><span class="s2">? ($): &quot;</span><span class="s1">)</span>
+        <span class="s0">if </span><span class="s1">new_equity != </span><span class="s2">'S' </span><span class="s0">and </span><span class="s1">new_equity != </span><span class="s2">'s'</span><span class="s1">:</span>
+            <span class="s1">holding.setEquity(float(new_equity))</span>
+        <span class="s1">print(</span><span class="s2">f&quot;Current P/L: $</span><span class="s0">{</span><span class="s1">holding.getP_L()</span><span class="s0">:</span><span class="s2">.2f</span><span class="s0">}</span><span class="s2">&quot;</span><span class="s1">)</span>
+        <span class="s1">print(</span><span class="s2">&quot;Type 'S' for same value.&quot;</span><span class="s1">)</span>
+        <span class="s1">new_p_l = input(</span><span class="s2">f&quot;What is your current P/L for </span><span class="s0">{</span><span class="s1">holding.getTicker()</span><span class="s0">}</span><span class="s2">? ($): &quot;</span><span class="s1">)</span>
+        <span class="s0">if </span><span class="s1">new_p_l != </span><span class="s2">'S' </span><span class="s0">and </span><span class="s1">new_p_l != </span><span class="s2">'s'</span><span class="s1">:</span>
+            <span class="s1">holding.setP_L(float(new_p_l))</span>
+    <span class="s1">portfolio.updateData()</span>
+    <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">updateBrokerageCash(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">print(</span><span class="s2">f&quot;Current brokerage cash is $</span><span class="s0">{</span><span class="s1">portfolio.getBrokerageCash()</span><span class="s0">:</span><span class="s2">,.2f</span><span class="s0">}</span><span class="s2">.&quot;</span><span class="s1">)</span>
+    <span class="s1">answer = float(input(</span><span class="s2">&quot;What is the new amount of brokerage cash in the account? ($): &quot;</span><span class="s1">))</span>
+    <span class="s1">portfolio.setBrokerageCash(answer)</span>
+    <span class="s1">portfolio.updateData()</span>
+    <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">updateInterestRate(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">print(</span><span class="s2">f&quot;Current interest rate is </span><span class="s0">{</span><span class="s1">portfolio.getInterestRate() * </span><span class="s3">100</span><span class="s0">:</span><span class="s2">.2f</span><span class="s0">}</span><span class="s2">%.&quot;</span><span class="s1">)</span>
+    <span class="s1">answer = float(input(</span><span class="s2">&quot;What is the new interest rate on brokerage cash? (%): &quot;</span><span class="s1">))</span>
+    <span class="s1">portfolio.setInterestRate(answer / </span><span class="s3">100</span><span class="s1">)</span>
+    <span class="s1">portfolio.updateData()</span>
+    <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">changeDaily(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">showHoldingList(portfolio)</span>
+    <span class="s1">answer = int(input(</span><span class="s2">&quot;Which holding would you like to change your daily investment for?: &quot;</span><span class="s1">))</span>
+    <span class="s1">clear()</span>
+    <span class="s0">if </span><span class="s1">answer &lt; len(portfolio.getHoldings()):</span>
+        <span class="s1">holding = portfolio.getHolding(answer)</span>
+        <span class="s1">print(</span><span class="s2">f&quot;The current daily investment for </span><span class="s0">{</span><span class="s1">holding.getTicker()</span><span class="s0">} </span><span class="s2">is $</span><span class="s0">{</span><span class="s1">holding.getDailyInvestment()</span><span class="s0">:</span><span class="s2">.2f</span><span class="s0">}</span><span class="s2">&quot;</span><span class="s1">)</span>
+        <span class="s1">new_daily = float(input(</span><span class="s2">&quot;What would you like to change it to? ($): &quot;</span><span class="s1">))</span>
+        <span class="s1">holding.setDaily(new_daily)</span>
+        <span class="s1">portfolio.updateData()</span>
+        <span class="s1">saveData()</span>
+
+
+<span class="s0">def </span><span class="s1">viewPortfolio(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">table.field_names = (</span><span class="s2">&quot;Ticker&quot;</span><span class="s0">, </span><span class="s2">&quot;Sector&quot;</span><span class="s0">, </span><span class="s2">&quot;Type&quot;</span><span class="s0">, </span><span class="s2">&quot;Diversity&quot;</span><span class="s0">, </span><span class="s2">&quot;Div Yield&quot;</span><span class="s0">, </span><span class="s2">&quot;Exp Ratio&quot;</span><span class="s0">, </span><span class="s2">&quot;Wgt Exp Ratio&quot;</span><span class="s0">, </span><span class="s2">&quot;Equity&quot;</span><span class="s0">, </span><span class="s2">&quot;Annual Div&quot;</span><span class="s0">,</span>
+                         <span class="s2">&quot;Dly Investment&quot;</span><span class="s0">, </span><span class="s2">&quot;Dly Div Inc&quot;</span><span class="s0">, </span><span class="s2">&quot;P/L&quot;</span><span class="s0">, </span><span class="s2">&quot;Divs Reinvested&quot;</span><span class="s0">, </span><span class="s2">&quot;CB&quot;</span><span class="s0">, </span><span class="s2">&quot;Adj CB&quot;</span><span class="s0">, </span><span class="s2">&quot;ACB Yield&quot;</span><span class="s1">)</span>
+    <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">portfolio.getHoldings():</span>
+        <span class="s1">table.add_row(holding.getDataList())</span>
+    <span class="s1">table.add_row(portfolio.getDataList())</span>
+    <span class="s1">print(table)</span>
+    <span class="s1">input(</span><span class="s2">&quot;Press 'Enter' to return to menu: &quot;</span><span class="s1">)</span>
+    <span class="s1">table.clear()</span>
+
+
+<span class="s0">def </span><span class="s1">viewPortfolioOverview(portfolio):</span>
+    <span class="s1">clear()</span>
+    <span class="s1">print(</span><span class="s2">&quot;Manually Entered Data&quot;</span><span class="s1">)</span>
+    <span class="s1">table.field_names = (</span><span class="s2">&quot;Brokerage Cash&quot;</span><span class="s0">, </span><span class="s2">&quot;Cash Interest&quot;</span><span class="s0">, </span><span class="s2">&quot;Non-Documented Div&quot;</span><span class="s0">, </span><span class="s2">&quot;Interest Rate&quot;</span><span class="s1">)</span>
+    <span class="s1">table.add_row(portfolio.getManualList())</span>
+    <span class="s1">print(table)</span>
+    <span class="s1">print(</span><span class="s2">&quot;</span><span class="s0">\n </span><span class="s2">Calculated Data&quot;</span><span class="s1">)</span>
+    <span class="s1">table1.field_names = (</span><span class="s2">&quot;Div Yield&quot;</span><span class="s0">, </span><span class="s2">&quot;Yield on CB&quot;</span><span class="s0">, </span><span class="s2">&quot;Yield on ACB&quot;</span><span class="s0">, </span><span class="s2">&quot;Dly Inv Yield&quot;</span><span class="s0">, </span><span class="s2">&quot;Adj P/L&quot;</span><span class="s0">, </span><span class="s2">&quot;Est Ann Interest&quot;</span><span class="s0">, </span><span class="s2">&quot;Est Ann Div Inc&quot;</span><span class="s0">, </span><span class="s2">&quot;Est Ann Exp Cost&quot;</span><span class="s1">)</span>
+    <span class="s1">table1.add_row(portfolio.getCalculatedList())</span>
+    <span class="s1">print(table1)</span>
+    <span class="s1">input(</span><span class="s2">&quot;Press 'Enter' to return to menu: &quot;</span><span class="s1">)</span>
+    <span class="s1">table.clear()</span>
+    <span class="s1">table1.clear()</span>
+
+
+<span class="s0">try</span><span class="s1">:</span>
+    <span class="s0">with </span><span class="s1">open(</span><span class="s2">'portfolioData.txt'</span><span class="s0">, </span><span class="s2">'rb'</span><span class="s1">) </span><span class="s0">as </span><span class="s1">file:</span>
+        <span class="s1">portfolios = pickle.load(file)</span>
+<span class="s0">except</span><span class="s1">:</span>
+    <span class="s1">portfolios = []</span>
+
+<span class="s1">viewingPortfolio = </span><span class="s0">None</span>
+<span class="s1">table = PrettyTable()</span>
+<span class="s1">table1 = PrettyTable()</span>
+<span class="s1">startup()</span>
+</pre>
+</body>
+</html>

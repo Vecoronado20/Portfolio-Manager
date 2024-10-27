@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>Holding.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Holding.py</font>
+</center></td></tr></table>
+<pre><span class="s0">class </span><span class="s1">Holding:</span>
+    <span class="s0">def </span><span class="s1">__init__(self</span><span class="s0">, </span><span class="s1">ticker</span><span class="s0">, </span><span class="s1">sector</span><span class="s0">, </span><span class="s1">type</span><span class="s0">, </span><span class="s1">div_yield</span><span class="s0">, </span><span class="s1">exp_ratio</span><span class="s0">, </span><span class="s1">equity):</span>
+        <span class="s1">self.ticker = ticker</span>
+        <span class="s1">self.sector = sector</span>
+        <span class="s1">self.type = type</span>
+        <span class="s1">self.diversity = </span><span class="s2">0</span>
+        <span class="s1">self.div_yield = div_yield</span>
+        <span class="s1">self.exp_ratio = exp_ratio</span>
+        <span class="s1">self.weighted_exp_ratio = </span><span class="s2">0</span>
+        <span class="s1">self.equity = equity</span>
+        <span class="s1">self.est_annual_div = </span><span class="s2">0</span>
+        <span class="s1">self.daily_investment = </span><span class="s2">0</span>
+        <span class="s1">self.daily_div_increase = </span><span class="s2">0</span>
+        <span class="s1">self.p_l = </span><span class="s2">0</span>
+        <span class="s1">self.div_reinvested = </span><span class="s2">0</span>
+        <span class="s1">self.cost_basis = </span><span class="s2">0</span>
+        <span class="s1">self.adj_cost_basis = </span><span class="s2">0</span>
+        <span class="s1">self.adj_div_yield = div_yield</span>
+
+    <span class="s0">def </span><span class="s1">calculateData(self):</span>
+        <span class="s1">self.setAnnualDiv()</span>
+        <span class="s1">self.setCostBasis()</span>
+        <span class="s1">self.setAdjCostBasis()</span>
+
+    <span class="s0">def </span><span class="s1">setDiversity(self</span><span class="s0">, </span><span class="s1">new_diversity):</span>
+        <span class="s1">self.diversity = new_diversity</span>
+
+    <span class="s0">def </span><span class="s1">setDivYield(self</span><span class="s0">, </span><span class="s1">new_div_yield):</span>
+        <span class="s1">self.div_yield = new_div_yield</span>
+
+    <span class="s0">def </span><span class="s1">setWeightedExpRatio(self):</span>
+        <span class="s1">self.weighted_exp_ratio = self.diversity * self.exp_ratio</span>
+
+    <span class="s0">def </span><span class="s1">setEquity(self</span><span class="s0">, </span><span class="s1">new_equity):</span>
+        <span class="s1">self.equity = new_equity</span>
+
+    <span class="s0">def </span><span class="s1">setAnnualDiv(self):</span>
+        <span class="s1">self.est_annual_div = self.div_yield * self.equity</span>
+
+    <span class="s0">def </span><span class="s1">setDaily(self</span><span class="s0">, </span><span class="s1">new_daily):</span>
+        <span class="s1">self.daily_investment = new_daily</span>
+
+    <span class="s0">def </span><span class="s1">setDailyDivIncrease(self):</span>
+        <span class="s1">self.daily_div_increase = self.div_yield * self.daily_investment</span>
+
+    <span class="s0">def </span><span class="s1">setP_L(self</span><span class="s0">, </span><span class="s1">new_p_l):</span>
+        <span class="s1">self.p_l = new_p_l</span>
+
+    <span class="s0">def </span><span class="s1">setCostBasis(self):</span>
+        <span class="s1">self.cost_basis = self.equity - self.p_l</span>
+
+    <span class="s0">def </span><span class="s1">setAdjCostBasis(self):</span>
+        <span class="s1">self.adj_cost_basis = self.cost_basis - self.div_reinvested</span>
+
+    <span class="s0">def </span><span class="s1">setAdjDivYield(self):</span>
+        <span class="s1">self.adj_div_yield = self.est_annual_div / self.adj_cost_basis</span>
+
+    <span class="s0">def </span><span class="s1">addDividend(self</span><span class="s0">, </span><span class="s1">div_amount):</span>
+        <span class="s1">self.div_reinvested += div_amount</span>
+
+    <span class="s0">def </span><span class="s1">getTicker(self):</span>
+        <span class="s0">return </span><span class="s1">self.ticker</span>
+
+    <span class="s0">def </span><span class="s1">getDiversity(self):</span>
+        <span class="s0">return </span><span class="s1">self.diversity</span>
+
+    <span class="s0">def </span><span class="s1">getDivYield(self):</span>
+        <span class="s0">return </span><span class="s1">self.div_yield</span>
+
+    <span class="s0">def </span><span class="s1">getExpRatio(self):</span>
+        <span class="s0">return </span><span class="s1">self.exp_ratio</span>
+
+    <span class="s0">def </span><span class="s1">getWeightedExpRatio(self):</span>
+        <span class="s0">return </span><span class="s1">self.weighted_exp_ratio</span>
+
+    <span class="s0">def </span><span class="s1">getEquity(self):</span>
+        <span class="s0">return </span><span class="s1">self.equity</span>
+
+    <span class="s0">def </span><span class="s1">getAnnualDiv(self):</span>
+        <span class="s0">return </span><span class="s1">self.est_annual_div</span>
+
+    <span class="s0">def </span><span class="s1">getDailyInvestment(self):</span>
+        <span class="s0">return </span><span class="s1">self.daily_investment</span>
+
+    <span class="s0">def </span><span class="s1">getDailyDivIncrease(self):</span>
+        <span class="s0">return </span><span class="s1">self.daily_div_increase</span>
+
+    <span class="s0">def </span><span class="s1">getP_L(self):</span>
+        <span class="s0">return </span><span class="s1">self.p_l</span>
+
+    <span class="s0">def </span><span class="s1">getDivReinvested(self):</span>
+        <span class="s0">return </span><span class="s1">self.div_reinvested</span>
+
+    <span class="s0">def </span><span class="s1">getCostBasis(self):</span>
+        <span class="s0">return </span><span class="s1">self.cost_basis</span>
+
+    <span class="s0">def </span><span class="s1">getAdjCostBasis(self):</span>
+        <span class="s0">return </span><span class="s1">self.adj_cost_basis</span>
+
+    <span class="s0">def </span><span class="s1">getDataList(self):</span>
+        <span class="s0">return </span><span class="s1">[self.ticker</span><span class="s0">, </span><span class="s1">self.sector</span><span class="s0">, </span><span class="s1">self.type</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.diversity * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.div_yield * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.exp_ratio * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.weighted_exp_ratio * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.4f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.equity</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.est_annual_div</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.daily_investment</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.daily_div_increase</span><span class="s0">:</span><span class="s3">,.4f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.p_l</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.div_reinvested</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.cost_basis</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.adj_cost_basis</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.adj_div_yield * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s1">]</span>
+</pre>
+</body>
+</html>

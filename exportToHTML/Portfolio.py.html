@@ -1,0 +1,173 @@
+<html>
+<head>
+<title>Portfolio.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Portfolio.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">Holding</span>
+
+
+<span class="s0">class </span><span class="s1">Portfolio:</span>
+    <span class="s0">def </span><span class="s1">__init__(self</span><span class="s0">, </span><span class="s1">name):</span>
+        <span class="s1">self.name = name</span>
+        <span class="s1">self.holdings = []</span>
+        <span class="s1">self.total_diversity = </span><span class="s2">0</span>
+        <span class="s1">self.total_weighted_exp_ratio = </span><span class="s2">0</span>
+        <span class="s1">self.total_equity = </span><span class="s2">0</span>
+        <span class="s1">self.total_annual_div = </span><span class="s2">0</span>
+        <span class="s1">self.total_daily_investments = </span><span class="s2">0</span>
+        <span class="s1">self.total_daily_div_increase = </span><span class="s2">0</span>
+        <span class="s1">self.total_p_l = </span><span class="s2">0</span>
+        <span class="s1">self.total_div_reinvested = </span><span class="s2">0</span>
+        <span class="s1">self.total_cost_basis = </span><span class="s2">0</span>
+        <span class="s1">self.total_adj_cost_basis = </span><span class="s2">0</span>
+        <span class="s1">self.brokerage_cash = </span><span class="s2">0</span>
+        <span class="s1">self.cash_interest = </span><span class="s2">0</span>
+        <span class="s1">self.non_documented_div = </span><span class="s2">0</span>
+        <span class="s1">self.interest_rate = </span><span class="s2">0</span>
+
+    <span class="s0">def </span><span class="s1">__str__(self):</span>
+        <span class="s0">return </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.name</span><span class="s0">} </span><span class="s3">- Total Equity: $</span><span class="s0">{</span><span class="s1">self.total_equity</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span>
+
+    <span class="s0">def </span><span class="s1">calculateTotalEquity(self):</span>
+        <span class="s1">equity = </span><span class="s2">0</span>
+        <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">self.holdings:</span>
+            <span class="s1">equity += holding.getEquity()</span>
+        <span class="s1">self.total_equity = equity</span>
+
+    <span class="s0">def </span><span class="s1">calculateDiversity(self):</span>
+        <span class="s1">self.calculateTotalEquity()</span>
+        <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">self.holdings:</span>
+            <span class="s1">holding.setDiversity(holding.getEquity() / self.total_equity)</span>
+
+    <span class="s0">def </span><span class="s1">calculateWeightedExpenseRatio(self):</span>
+        <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">self.holdings:</span>
+            <span class="s1">holding.setWeightedExpRatio()</span>
+
+    <span class="s0">def </span><span class="s1">calculateDailyDivIncrease(self):</span>
+        <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">self.holdings:</span>
+            <span class="s1">holding.setDailyDivIncrease()</span>
+
+    <span class="s0">def </span><span class="s1">calculateAdjDivYield(self):</span>
+        <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">self.holdings:</span>
+            <span class="s1">holding.setAdjDivYield()</span>
+
+    <span class="s0">def </span><span class="s1">updateHoldings(self):</span>
+        <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">self.holdings:</span>
+            <span class="s1">holding.calculateData()</span>
+
+    <span class="s0">def </span><span class="s1">addInterestPayment(self</span><span class="s0">, </span><span class="s1">interest_amount):</span>
+        <span class="s1">self.cash_interest += interest_amount</span>
+
+    <span class="s0">def </span><span class="s1">addNonDocDivPayment(self</span><span class="s0">, </span><span class="s1">div_amount):</span>
+        <span class="s1">self.non_documented_div += div_amount</span>
+
+    <span class="s0">def </span><span class="s1">setBrokerageCash(self</span><span class="s0">, </span><span class="s1">cash_amount):</span>
+        <span class="s1">self.brokerage_cash = cash_amount</span>
+
+    <span class="s0">def </span><span class="s1">setInterestRate(self</span><span class="s0">, </span><span class="s1">new_interest_rate):</span>
+        <span class="s1">self.interest_rate = new_interest_rate</span>
+
+    <span class="s0">def </span><span class="s1">getYield(self):</span>
+        <span class="s0">return </span><span class="s1">self.total_annual_div / self.total_equity</span>
+
+    <span class="s0">def </span><span class="s1">getCostBasisYield(self):</span>
+        <span class="s0">return </span><span class="s1">self.total_annual_div / self.total_cost_basis</span>
+
+    <span class="s0">def </span><span class="s1">getAdjDivYield(self):</span>
+        <span class="s0">return </span><span class="s1">self.total_annual_div / self.total_adj_cost_basis</span>
+
+    <span class="s0">def </span><span class="s1">getDailyYield(self):</span>
+        <span class="s0">if </span><span class="s1">self.total_daily_investments &gt; </span><span class="s2">0</span><span class="s1">:</span>
+            <span class="s0">return </span><span class="s1">self.total_daily_div_increase / self.total_daily_investments</span>
+        <span class="s0">else</span><span class="s1">:</span>
+            <span class="s0">return </span><span class="s2">0</span>
+
+    <span class="s0">def </span><span class="s1">getAdjP_L(self):</span>
+        <span class="s0">return </span><span class="s1">self.total_equity - self.total_adj_cost_basis</span>
+
+    <span class="s0">def </span><span class="s1">getAnnualInterest(self):</span>
+        <span class="s0">return </span><span class="s1">self.brokerage_cash * self.interest_rate</span>
+
+    <span class="s0">def </span><span class="s1">getAnnualDivIncrease(self):</span>
+        <span class="s0">return </span><span class="s1">self.total_daily_div_increase * </span><span class="s2">252</span>
+
+    <span class="s0">def </span><span class="s1">getAnnualExpCost(self):</span>
+        <span class="s0">return </span><span class="s1">self.total_equity * self.total_weighted_exp_ratio</span>
+
+    <span class="s0">def </span><span class="s1">calculateColumnTotals(self):</span>
+        <span class="s1">self.total_diversity = </span><span class="s2">0</span>
+        <span class="s1">self.total_weighted_exp_ratio = </span><span class="s2">0</span>
+        <span class="s1">self.total_equity = </span><span class="s2">0</span>
+        <span class="s1">self.total_annual_div = </span><span class="s2">0</span>
+        <span class="s1">self.total_daily_investments = </span><span class="s2">0</span>
+        <span class="s1">self.total_daily_div_increase = </span><span class="s2">0</span>
+        <span class="s1">self.total_p_l = </span><span class="s2">0</span>
+        <span class="s1">self.total_div_reinvested = </span><span class="s2">0</span>
+        <span class="s1">self.total_cost_basis = </span><span class="s2">0</span>
+        <span class="s1">self.total_adj_cost_basis = </span><span class="s2">0</span>
+        <span class="s0">for </span><span class="s1">holding </span><span class="s0">in </span><span class="s1">self.holdings:</span>
+            <span class="s1">self.total_diversity += holding.getDiversity()</span>
+            <span class="s1">self.total_weighted_exp_ratio += holding.getWeightedExpRatio()</span>
+            <span class="s1">self.total_equity += holding.getEquity()</span>
+            <span class="s1">self.total_annual_div += holding.getAnnualDiv()</span>
+            <span class="s1">self.total_daily_investments += holding.getDailyInvestment()</span>
+            <span class="s1">self.total_daily_div_increase += holding.getDailyDivIncrease()</span>
+            <span class="s1">self.total_p_l += holding.getP_L()</span>
+            <span class="s1">self.total_div_reinvested += holding.getDivReinvested()</span>
+            <span class="s1">self.total_cost_basis += holding.getCostBasis()</span>
+            <span class="s1">self.total_adj_cost_basis += holding.getAdjCostBasis()</span>
+        <span class="s1">self.total_adj_cost_basis -= self.non_documented_div</span>
+
+    <span class="s0">def </span><span class="s1">updateData(self):</span>
+        <span class="s1">self.updateHoldings()</span>
+        <span class="s1">self.calculateDiversity()</span>
+        <span class="s1">self.calculateWeightedExpenseRatio()</span>
+        <span class="s1">self.calculateDailyDivIncrease()</span>
+        <span class="s1">self.calculateColumnTotals()</span>
+        <span class="s1">self.calculateAdjDivYield()</span>
+
+    <span class="s0">def </span><span class="s1">addHolding(self</span><span class="s0">, </span><span class="s1">newHolding):</span>
+        <span class="s1">self.holdings.append(newHolding)</span>
+        <span class="s1">self.updateData()</span>
+
+    <span class="s0">def </span><span class="s1">getName(self):</span>
+        <span class="s0">return </span><span class="s1">self.name</span>
+
+    <span class="s0">def </span><span class="s1">getHoldings(self):</span>
+        <span class="s0">return </span><span class="s1">self.holdings</span>
+
+    <span class="s0">def </span><span class="s1">getHolding(self</span><span class="s0">, </span><span class="s1">index):</span>
+        <span class="s0">return </span><span class="s1">self.holdings[index]</span>
+
+    <span class="s0">def </span><span class="s1">getTotalEquity(self):</span>
+        <span class="s0">return </span><span class="s1">self.total_equity</span>
+
+    <span class="s0">def </span><span class="s1">getBrokerageCash(self):</span>
+        <span class="s0">return </span><span class="s1">self.brokerage_cash</span>
+
+    <span class="s0">def </span><span class="s1">getInterestRate(self):</span>
+        <span class="s0">return </span><span class="s1">self.interest_rate</span>
+
+    <span class="s0">def </span><span class="s1">getDataList(self):</span>
+        <span class="s0">return </span><span class="s1">[</span><span class="s3">&quot;Total&quot;</span><span class="s0">, </span><span class="s3">&quot;-&quot;</span><span class="s0">, </span><span class="s3">&quot;-&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.total_diversity * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.getYield() * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">&quot;-&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.total_weighted_exp_ratio * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.4f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.total_equity</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.total_annual_div</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.total_daily_investments</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.total_daily_div_increase</span><span class="s0">:</span><span class="s3">,.4f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.total_p_l</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.total_div_reinvested</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.total_cost_basis</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.total_adj_cost_basis</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.getAdjDivYield() * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s1">]</span>
+
+    <span class="s0">def </span><span class="s1">getManualList(self):</span>
+        <span class="s0">return </span><span class="s1">[</span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.brokerage_cash</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.cash_interest</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.non_documented_div</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.interest_rate * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s1">]</span>
+
+    <span class="s0">def </span><span class="s1">getCalculatedList(self):</span>
+        <span class="s0">return </span><span class="s1">[</span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.getYield() * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.getCostBasisYield() * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.getAdjDivYield() * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">self.getDailyYield() * </span><span class="s2">100</span><span class="s0">:</span><span class="s3">.2f</span><span class="s0">}</span><span class="s3">%&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.getAdjP_L()</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.getAnnualInterest()</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.getAnnualDivIncrease()</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s0">, </span><span class="s3">f&quot;$</span><span class="s0">{</span><span class="s1">self.getAnnualExpCost()</span><span class="s0">:</span><span class="s3">,.2f</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s1">]</span>
+</pre>
+</body>
+</html>
