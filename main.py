@@ -5,6 +5,7 @@ import charset_normalizer.md__mypyc
 from os import system
 import yfinance as yf
 import time
+from termplot import Plot
 from time import strftime, localtime
 from Portfolio import Portfolio
 from Holding import Holding
@@ -225,6 +226,7 @@ def updateData(portfolio):
             clear()
             updateHolding(holding)
     portfolio.updateData()
+    portfolio.addGraphPoint(portfolio.getTotalEquity)
     saveData()
 
 
@@ -340,8 +342,14 @@ def viewHoldingInfo(portfolio):
 
 
 def viewValueGraph(portfolio):
-    # Placeholder for future code to be written
-    pass
+    clear()
+    xvars = []
+    yvars = []
+    # Plan on adding dates in the future as the xvars
+    for i, point in enumerate(portfolio.getGraphPoints()):
+        xvars.append(i)
+        yvars.append(point)
+    Plot(xvars, yvars, LINE)
 
 
 try:
