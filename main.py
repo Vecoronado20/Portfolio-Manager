@@ -114,7 +114,8 @@ def portfolioHome(portfolio):
         print("(j) View Portfolio Data")
         print("(k) View Portfolio Overview Data")
         print("(l) View Holding Info")
-        print("(m) Return to Home")
+        print("(m) View Value Graph")
+        print("(n) Return to Home")
         answer = input("Enter choice: ")
         answer = answer.lower()
         if answer == "a":
@@ -142,6 +143,8 @@ def portfolioHome(portfolio):
         elif answer == "l":
             viewHoldingInfo(portfolio)
         elif answer == "m":
+            viewValueGraph(portfolio)
+        elif answer == "n":
             break
 
 
@@ -334,6 +337,11 @@ def viewHoldingInfo(portfolio):
         print("")
         input("Press 'Enter' to return to menu: ")
         table.clear()
+
+
+def viewValueGraph(portfolio):
+    # Placeholder for future code to be written
+    pass
 
 
 try:
