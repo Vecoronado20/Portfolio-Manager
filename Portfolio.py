@@ -3,7 +3,7 @@ import yfinance as yf
 from Interest_Receipt import Interest_Receipt
 
 
-# Holds all relevant info for portfolios including holdings and interest receipts
+# Holds all relevant info for portfolios including holdings, aggregated totals, and interest receipts
 class Portfolio:
     def __init__(self, name):
         self.name = name
