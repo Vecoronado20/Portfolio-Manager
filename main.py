@@ -350,6 +350,7 @@ def viewValueGraph(portfolio):
         xvars.append(i)
         yvars.append(point)
     Plot(xvars, yvars, LINE)
+    input("Press 'Enter' to return to menu: ")
 
 
 try:
