@@ -4,7 +4,7 @@ import yfinance as yf
 from Dividend_Receipt import Dividend_Receipt
 from Stock_Data_Handler import Stock_Data_Handler
 
-
+# Holds all relevant information for one stock/etf including aggregated totals and dividend receipts
 class Holding:
     def __init__(self, ticker, sector, type, div_yield, exp_ratio, equity):
         self.ticker = ticker
@@ -74,6 +74,7 @@ class Holding:
     def setDripShares(self, amount):
         self.drip_shares = amount
 
+    # Adds dividend to the total for this particular stock and creates a receipt for future tracking purposes
     def addDividend(self, div_amount, stock_data_handler):
         if div_amount > 0:
             self.div_reinvested += div_amount
@@ -130,6 +131,7 @@ class Holding:
     def getCurrentPrice(self):
         return self.current_price
 
+    # Produces stock info list for portfolio holdings view
     def getDataList(self):
         return [self.ticker, self.sector, self.type, f"{self.diversity * 100:.2f}%", f"{self.div_yield * 100:.2f}%", f"{self.exp_ratio * 100:.2f}%", f"{self.weighted_exp_ratio * 100:.4f}%", f"${self.equity:,.2f}", f"${self.est_annual_div:,.2f}", f"${self.daily_investment:,.2f}", f"${self.daily_div_increase:,.4f}", f"${self.p_l:,.2f}", f"${self.div_reinvested:,.2f}", f"${self.cost_basis:,.2f}", f"${self.adj_cost_basis:,.2f}", f"{self.adj_div_yield * 100:.2f}%", f"{self.drip_shares:.4f}"]
 

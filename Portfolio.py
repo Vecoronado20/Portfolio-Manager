@@ -23,6 +23,7 @@ class Portfolio:
         self.non_documented_div = 0
         self.interest_rate = 0
         self.interest_history = []
+        self.graph_points = []
 
     def __str__(self):
         return f"{self.name} - Total Equity: ${self.total_equity:,.2f}"
@@ -54,6 +55,7 @@ class Portfolio:
         for holding in self.holdings:
             holding.calculateData()
 
+    # Adds interest payment to total and creates a receipt object to track the payment in the future
     def addInterestPayment(self, interest_amount):
         self.cash_interest += interest_amount
         new_receipt = Interest_Receipt(interest_amount)
@@ -95,6 +97,7 @@ class Portfolio:
     def getAnnualExpCost(self):
         return self.total_equity * self.total_weighted_exp_ratio
 
+    # Determine cumulative column totals by summing each investment
     def calculateColumnTotals(self):
         self.total_diversity = 0
         self.total_weighted_exp_ratio = 0
@@ -131,6 +134,9 @@ class Portfolio:
         self.holdings.append(newHolding)
         self.updateData()
 
+    def addGraphPoint(self, currValue):
+        self.graph_points.append(currValue)
+
     def getName(self):
         return self.name
 
@@ -151,12 +157,18 @@ class Portfolio:
 
     def getInterestHistory(self):
         return self.interest_history
+    
+    def getGraphPoints(self):
+        return self.graph_points
 
+    # Creates a row of total values for the overall portfolio holdings view
     def getDataList(self):
         return ["Total", "-", "-", f"{self.total_diversity * 100:.2f}%", f"{self.getYield() * 100:.2f}%", "-", f"{self.total_weighted_exp_ratio * 100:.4f}%", f"${self.total_equity:,.2f}", f"${self.total_annual_div:,.2f}", f"${self.total_daily_investments:,.2f}", f"${self.total_daily_div_increase:,.4f}", f"${self.total_p_l:,.2f}", f"${self.total_div_reinvested:,.2f}", f"${self.total_cost_basis:,.2f}", f"${self.total_adj_cost_basis:,.2f}", f"{self.getAdjDivYield() * 100:.2f}%", "-"]
 
+    # Creates a row of total values for the manual entry items view
     def getManualList(self):
         return [f"${self.brokerage_cash:,.2f}", f"${self.cash_interest:,.2f}", f"${self.non_documented_div:,.2f}", f"{self.interest_rate * 100:.2f}%"]
 
+    # Creates a row of aggregated values for the portfolio summary view
     def getCalculatedList(self):
         return [f"{self.getYield() * 100:.2f}%", f"{self.getCostBasisYield() * 100:.2f}%", f"{self.getAdjDivYield() * 100:.2f}%", f"{self.getDailyYield() * 100:.2f}%", f"${self.getAdjP_L():,.2f}", f"${self.getAnnualInterest():,.2f}", f"${self.getAnnualDivIncrease():,.2f}", f"${self.getAnnualExpCost():,.2f}"]
